@@ -6,7 +6,7 @@ const Author = require('../models/Author');
 router.get('/', async (req, res) => {
   try {
     const authors = await Author.find();
-    res.json(authors);
+    res.status(200).json(authors);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

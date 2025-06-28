@@ -4,10 +4,11 @@ const bodyParser = require('body-parser');
 const bookRoutes = require('./routes/bookRoutes');
 const authorRoutes = require('./routes/authorRoutes');
 require('dotenv').config();
+const cors = require('cors')
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
+app.use(cors())
 // Middleware
 app.use(bodyParser.json());
 app.use('/api/books', bookRoutes);
