@@ -5,8 +5,10 @@ const Book = require('../models/Book');
 // GET all books
 router.get('/', async (req, res) => {
   try {
+    setTimeout( async ()=>{
     const books = await Book.find();
     res.json(books);
+    },2000)
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
