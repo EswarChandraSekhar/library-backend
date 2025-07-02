@@ -5,10 +5,10 @@ const Author = require('../models/Author');
 // GET all authors
 router.get('/', async (req, res) => {
   try {
-    setTimeout(async()=>{
+   
  const authors = await Author.find();
     res.status(200).json(authors);
-    },2000)
+    
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
