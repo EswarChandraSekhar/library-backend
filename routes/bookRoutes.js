@@ -51,4 +51,19 @@ router.get('/:bookId', async (req, res) => {
   }
 });
 
+// DELETE book by bookId
+router.delete('/:bookId', async (req, res) => {
+  const bookId = parseInt(req.params.bookId); // assuming bookId is a number
+  try {
+    const deletedBook = await Book.findOneAndDelete({ bookId });
+    if (!deletedBook) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+    res.json({ message: 'Book deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
 module.exports = router;

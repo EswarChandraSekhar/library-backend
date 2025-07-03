@@ -4,7 +4,7 @@ const todoSchema = new mongoose.Schema({
   id: {type: String,required: true},
   title: { type: String, required: true },
   category: { type: String, required: true },
-  taskCompleted: { type: Boolean, default: false }
+  taskCompleted: { type: String, default: false }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Todo', todoSchema);
