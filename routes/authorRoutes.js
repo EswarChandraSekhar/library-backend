@@ -37,4 +37,24 @@ router.delete('/:id',async (req,res)=>{
   }
 })
 
+//edit 
+router.put('/:id', async (req,res)=>{
+  try{
+    let id = parseInt(req.params.id);
+    const selectedAuthor = await Author.findOne({id});
+    if (!selectedAuthor) return res.status(404).json({ error: 'Author not found' });
+    selectedAuthor.id = parseInt(req.body.id);
+    selectedAuthor.image = req.body.image;
+    selectedAuthor.name = req.body.name;
+    selectedAuthor.dob = req.body.dob;
+    selectedAuthor.nationality = req.body.nationality;
+    selectedAuthor.biography = req.body.biography;
+    let updatedTodo = await selectedAuthor.save()
+    res.json(updatedTodo);
+  }
+  catch (err) {
+    res.status(500).json({ error: 'Failed to update Author' });
+  }
+})
+
 module.exports = router;
