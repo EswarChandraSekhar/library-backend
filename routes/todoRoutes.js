@@ -36,22 +36,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-//edit 
-router.put('/:id', async (req,res)=>{
-  try{
-    let id = req.params.id;
-    const selectedTodo = await Todo.findOne({id});
-    if (!selectedTodo) return res.status(404).json({ error: 'Todo not found' });
-    selectedTodo.title = req.body.title;
-    selectedTodo.category = req.body.category;
-    selectedTodo.taskCompleted = req.body.taskCompleted;
-    selectedTodo.id = req.body.id;
-    let updatedTodo = await selectedTodo.save()
-    res.json(updatedTodo);
-  }
-  catch (err) {
-    res.status(500).json({ error: 'Failed to update todo' });
-  }
-})
-
 module.exports = router;
