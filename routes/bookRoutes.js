@@ -65,5 +65,28 @@ router.delete('/:bookId', async (req, res) => {
   }
 });
 
+//edit book
+router.put('/:bookId', async (req, res) => {
+  try {
+    let bookId = parseInt(req.params.bookId);
+    const selectedBook = await Book.findOne({ bookId });
+    if (!selectedBook) return res.status(404).json({ error: 'Book not found' });
+
+    selectedBook.title = req.body.title;
+    selectedBook.author = req.body.author;
+    selectedBook.authorId = req.body.authorId;
+    selectedBook.genre = req.body.genre;
+    selectedBook.description = req.body.description;
+    selectedBook.image_url = req.body.image_url;
+    selectedBook.bookId = req.body.bookId;
+
+    let updatedBook = await selectedBook.save();
+    res.json(updatedBook);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update book' });
+  }
+});
+
+
 
 module.exports = router;
