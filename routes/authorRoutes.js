@@ -1,13 +1,28 @@
 const express = require('express');
 const router = express.Router();
 const Author = require('../models/Author');
+const User = require('../models/User');
+const auth = require('./../middlewares/auth').auth
 
 // GET all authors
-router.get('/', async (req, res) => {
+router.get('/',  auth,  async (req, res) => {
   try {
-   
- const authors = await Author.find();
-    res.status(200).json(authors);
+  let user = req.user;
+  let user_obj = await User.findOne({email:user.email})
+    if (user_obj !== null) {
+      if (user_obj.role === 'user') {
+        res.status(403).json({
+          status: 'fail',
+          messgae: "Access Denied"
+        })
+        return;
+      }
+      const authors = await Author.find();
+      res.status(200).json(authors);
+    }
+    else{
+      res.status(400).json({message:'Invalid User'})
+    }
     
   } catch (err) {
     res.status(500).json({ message: err.message });

@@ -5,9 +5,9 @@ const jwt = require('jsonwebtoken')
 
 exports.auth = async (req,res,next)=>{
     try{
-        let token = req.headers('Authorization')?.split(' ')[1]
-        let valid = jwt.verify(token,process.env.JWT_SECRET_CODE)
-        req.user = valid;
+        let token = req.headers['authorization']?.split(' ')[1]
+        let user_obj = jwt.verify(token,process.env.JWT_SECRET_CODE)
+        req.user = user_obj;
         next()
     }
     catch(e){
