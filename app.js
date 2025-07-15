@@ -5,6 +5,8 @@ const bookRoutes = require('./routes/bookRoutes');
 const authorRoutes = require('./routes/authorRoutes');
 const todoRoutes = require('./routes/todoRoutes');
 const lostItemsRoutes = require('./routes/lostitemRoutes');
+const foundItemRoutes = require('./routes/founditemRoutes');
+
 const authRoutes = require('./routes/authRoutes')
 const helmet = require('helmet')
 require('dotenv').config();
@@ -20,6 +22,7 @@ app.use('/api/books', bookRoutes);
 app.use('/api/authors', authorRoutes);
 app.use('/api/todos', todoRoutes);
 app.use('/api/lost-items', lostItemsRoutes);
+app.use('/api/found-items', foundItemRoutes);
 app.use('/api/auth',authRoutes)
 
 // MongoDB connection
