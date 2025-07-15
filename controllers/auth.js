@@ -34,7 +34,7 @@ exports.register = async (req,res)=>{
             password: hashedPassword
         })
         if(obj){
-            let token = jwt.sign({email: email},process.env.JWT_SECRET_CODE,{expiresIn: '7d'})
+            let token = jwt.sign({email: email, username: user_obj.firstName + ' ' + user_obj.lastName},process.env.JWT_SECRET_CODE,{expiresIn: '7d'})
             res.status(201).json({
                 status: 'success',
                 message:'User created successfully!',
@@ -73,7 +73,7 @@ exports.login = async (req,res)=>{
         }
         let matched = await bcrypt.compare(password, user_obj.password)
         if(matched){
-            let token = jwt.sign({email},process.env.JWT_SECRET_CODE,{expiresIn:'7d'})
+            let token = jwt.sign({email,username: user_obj.firstName + ' ' + user_obj.lastName },process.env.JWT_SECRET_CODE,{expiresIn:'7d'})
             res.status(200).json({
                 status: 'success',
                 message:'User verified successfully!',
