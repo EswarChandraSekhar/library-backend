@@ -10,7 +10,13 @@ const FoundItemSchema = new mongoose.Schema({
   location: String,
   itemname: String,
   description: String,
-  dateoffound: String
+  dateoffound: String,
+   // ✅ Optional reference to registered user
+  userRef: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null,
+  }
 });
 
 module.exports = mongoose.model('FoundItem', FoundItemSchema);

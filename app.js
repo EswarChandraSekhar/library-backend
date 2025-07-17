@@ -6,6 +6,9 @@ const authorRoutes = require('./routes/authorRoutes');
 const todoRoutes = require('./routes/todoRoutes');
 const lostItemsRoutes = require('./routes/lostitemRoutes');
 const foundItemRoutes = require('./routes/founditemRoutes');
+const matchRoutes = require('./routes/matchRoutes');
+const userProfileRoutes = require('./routes/userProfileRoutes');
+
 
 const authRoutes = require('./routes/authRoutes')
 const helmet = require('helmet')
@@ -23,7 +26,11 @@ app.use('/api/authors', authorRoutes);
 app.use('/api/todos', todoRoutes);
 app.use('/api/lost-items', lostItemsRoutes);
 app.use('/api/found-items', foundItemRoutes);
-app.use('/api/auth',authRoutes)
+app.use('/api/auth',authRoutes);
+app.use('/api/matches', matchRoutes);
+app.use('/api/user', userProfileRoutes);
+
+
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })

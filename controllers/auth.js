@@ -34,7 +34,7 @@ exports.register = async (req,res)=>{
             password: hashedPassword
         })
         if(obj){
-            let token = jwt.sign({email: email, username: user_obj.firstName + ' ' + user_obj.lastName},process.env.JWT_SECRET_CODE,{expiresIn: '7d'})
+            let token = jwt.sign({email: email, username: obj.firstName + ' ' + obj.lastName},process.env.JWT_SECRET_CODE,{expiresIn: '7d'})
             res.status(201).json({
                 status: 'success',
                 message:'User created successfully!',
