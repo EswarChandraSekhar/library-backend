@@ -11,14 +11,8 @@ const LostItemSchema = new mongoose.Schema({
   itemname: String,
   dateoflost: String,
   description: String,
-  proof: String,
+  proof: String
+}, { timestamps: true });
 
-  // ✅ Optional field to link registered user
-  userRef: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    default: null,
-  }
-});
 
 module.exports = mongoose.model('LostItem', LostItemSchema);

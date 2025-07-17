@@ -34,14 +34,15 @@ exports.register = async (req,res)=>{
             password: hashedPassword
         })
         if(obj){
-            let token = jwt.sign({email: email, username: obj.firstName + ' ' + obj.lastName},process.env.JWT_SECRET_CODE,{expiresIn: '7d'})
+            let token = jwt.sign({email: email, username: obj.firstName + ' ' + obj.lastName,role:'user'},process.env.JWT_SECRET_CODE,{expiresIn: '7d'})
             res.status(201).json({
                 status: 'success',
                 message:'User created successfully!',
                 token: token,
                 username: firstName + ' ' + lastName,
                 email: email,
-                phoneNumber: phoneNumber
+                phoneNumber: phoneNumber,
+                role: 'user'
             })
         }
         else{
@@ -73,14 +74,15 @@ exports.login = async (req,res)=>{
         }
         let matched = await bcrypt.compare(password, user_obj.password)
         if(matched){
-            let token = jwt.sign({email,username: user_obj.firstName + ' ' + user_obj.lastName },process.env.JWT_SECRET_CODE,{expiresIn:'7d'})
+            let token = jwt.sign({email,username: user_obj.firstName + ' ' + user_obj.lastName, role:user_obj.role },process.env.JWT_SECRET_CODE,{expiresIn:'7d'})
             res.status(200).json({
                 status: 'success',
                 message:'User verified successfully!',
                 token: token,
                 username: user_obj.firstName + ' ' + user_obj.lastName,
                 email: email,
-                phoneNumber: user_obj.phoneNumber
+                phoneNumber: user_obj.phoneNumber,
+                role: user_obj.role
             })
         }
         else{
