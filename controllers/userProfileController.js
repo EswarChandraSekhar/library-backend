@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require ('../models/User');
 const LostItem = require('../models/lostitem');
 const FoundItem = require('../models/founditem');
 const Transaction = require('../models/Transaction');
