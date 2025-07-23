@@ -3,6 +3,9 @@ const router = express.Router();
 const LostItem = require('../models/lostitem');
 const User = require('../models/User');
 const auth = require('./../middlewares/auth').auth
+const { storage} = require('./../middlewares/imageStorage')
+const multer = require('multer')
+const upload = multer({storage})
 
 // GET all lost items
 router.get('/', auth,  async (req, res) => {
@@ -15,9 +18,14 @@ router.get('/', auth,  async (req, res) => {
 });
 
 // POST a new lost item
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, upload.array('images',5), async (req, res) => {
   const lostItem = new LostItem(req.body);
   try {
+  let image_list = []
+  for(let file of req.files){
+     image_list.push(file.path)
+  }
+  lostItem.images = image_list;
     const newItem = await lostItem.save();
     res.status(201).json(newItem);
   } catch (err) {

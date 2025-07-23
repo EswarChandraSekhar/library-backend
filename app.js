@@ -17,6 +17,10 @@ const helmet = require('helmet')
 require('dotenv').config();
 const cors = require('cors')
 
+console.log(process.env.CLOUDINARY_NAME)
+console.log(process.env.CLOUDINARY_API_KEY)
+console.log(process.env.CLOUDINARY_API_SECRET)
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(cors())
