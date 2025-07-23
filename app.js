@@ -8,6 +8,8 @@ const lostItemsRoutes = require('./routes/lostitemRoutes');
 const foundItemRoutes = require('./routes/founditemRoutes');
 const matchRoutes = require('./routes/matchRoutes');
 const userProfileRoutes = require('./routes/userProfileRoutes');
+const reactionRoutes = require('./routes/reactionRoutes');
+
 
 
 const authRoutes = require('./routes/authRoutes')
@@ -29,6 +31,8 @@ app.use('/api/found-items', foundItemRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/matches', matchRoutes);
 app.use('/api/user', userProfileRoutes);
+app.use('/api/reactions', reactionRoutes);
+
 
 
 
