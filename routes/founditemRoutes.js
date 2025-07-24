@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const FoundItem = require('../models/founditem');
+const auth = require('./../middlewares/auth').auth
+const { storage} = require('./../middlewares/imageStorage')
+const multer = require('multer')
+const upload = multer({storage})
 
 // GET all found items
 router.get('/', async (req, res) => {
@@ -13,16 +17,26 @@ router.get('/', async (req, res) => {
 });
 
 // POST a new found item
-router.post('/', async (req, res) => {
-     console.log("Received data:", req.body);
+router.post('/', upload.array('images', 5), async (req, res) => {
+  
   const foundItem = new FoundItem(req.body);
+  
   try {
+    let image_list = [];
+
+    for (let file of req.files) {
+      image_list.push(file.path);  // Store file path
+    }
+
+    foundItem.images = image_list;
+
     const newItem = await foundItem.save();
     res.status(201).json(newItem);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
+
 
 // GET found item by ID
 router.get('/:id', async (req, res) => {

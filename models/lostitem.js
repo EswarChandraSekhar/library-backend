@@ -14,7 +14,7 @@ const LostItemSchema = new mongoose.Schema({
   proof: String,
   images: {
     type:  [String],
-    required: true,
+    required: false,
     default: []
   }
 }, { timestamps: true });

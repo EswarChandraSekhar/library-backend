@@ -11,12 +11,10 @@ const FoundItemSchema = new mongoose.Schema({
   itemname: String,
   description: String,
   dateoffound: String,
-  images: [String],
-   // ✅ Optional reference to registered user
-  userRef: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    default: null,
+   images: {
+    type:  [String],
+    required: false,
+    default: []
   }
 });
 
