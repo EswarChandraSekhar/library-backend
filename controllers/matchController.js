@@ -2,6 +2,9 @@ const stringSimilarity = require('string-similarity');
 const LostItem = require('../models/lostitem');
 const FoundItem = require('../models/founditem');
 const Match = require('../models/match');
+const founditem = require('../models/founditem');
+const match = require('../models/match');
+const lostitem = require('../models/lostitem');
 
 // Helpers
 const normalizeString = (str) => (str || '').toString().trim().toLowerCase();
@@ -74,13 +77,13 @@ const matchLostAndFound = (lostList, foundList) => {
 // Controller to generate and return match results
 exports.generateMatches = async (req, res) => {
   try {
-    const lostItems = await LostItem.find();
-    const foundItems = await FoundItem.find();
+    const lostItems = await LostItem.find({status:'in-progress'});
+    const foundItems = await FoundItem.find({status:'in-progress'});
 
-    console.log(`🔎 Fetched ${lostItems.length} lost items and ${foundItems.length} found items.`);
+    //console.log(`🔎 Fetched ${lostItems.length} lost items and ${foundItems.length} found items.`);
 
     if (!lostItems.length || !foundItems.length) {
-      console.log('⚠️ No lost or found items to compare.');
+     // console.log('⚠️ No lost or found items to compare.');
       return res.status(200).json({
         status: 'success',
         message: 'No matches to generate.',
@@ -111,7 +114,7 @@ exports.generateMatches = async (req, res) => {
       allMatches.push(populatedMatch);
     }
 
-    console.log(`✅ Returning ${allMatches.length} total matched entries.`);
+   // console.log(`✅ Returning ${allMatches.length} total matched entries.`);
     return res.status(200).json({
       status: 'success',
       message: `${allMatches.length} matches returned.`,
@@ -127,3 +130,56 @@ exports.generateMatches = async (req, res) => {
     });
   }
 };
+
+exports.confirmMatch = async (req,res)=>{
+  try{
+   let  {lostId,foundId} = req.body;
+   let match_obj  = new match({
+    lostId, foundId,
+    confidence: 'High',
+    status:'Confirmed'
+   })
+   await match_obj.save()
+
+   let lostItem_obj = await lostitem.findById(lostId)
+   lostItem_obj.status = "found"
+   await lostItem_obj.save();
+   let foundItem_obj = await founditem.findById(foundId)
+   foundItem_obj.status = 'found'
+   await foundItem_obj.save()
+   res.status(200).json({
+    status:'success',
+    message:"Match Confirmed Successfully!"
+   })
+  }
+  catch(e){
+     res.status(500).json({
+    status:'fail',
+    message:"Something went wrong!"
+   })
+  }
+}
+
+exports.getOverview = async (req,res)=>{
+  try{
+    let lostItemCount = await lostitem.countDocuments({status:'in-progress'})
+    let foundItemCount = await founditem.countDocuments({status:'in-progress'})
+    let confirmedMatchCount = await match.countDocuments({status:'Confirmed'})
+    let pendingMatchCount = await match.countDocuments({status:'Pending'})
+    let rejectedMatchCount = await match.countDocuments({status:'Rejected'})
+    res.status(200).json({
+      status:'success',
+      data:{
+        lostItemCount, foundItemCount, confirmedMatchCount, pendingMatchCount, rejectedMatchCount
+      },
+      message:"Data fetched successfully!"
+    })
+  }
+  catch(e){
+    console.log(e)
+    res.status(500).json({
+      status:'fail',
+      message:"Something went wrong!"
+    })
+  }
+}
