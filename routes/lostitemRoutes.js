@@ -62,12 +62,16 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// PUT (update) lost item by ID
-router.put('/:id', auth,  async (req, res) => {
+// Post (update) lost item by ID
+router.post('/update', auth, upload.none(), async (req, res) => {
   try {
-    const item = await LostItem.findById(req.params.id);
-    if (!item) return res.status(404).json({ error: 'Lost item not found' });
+    const { _id } = req.body;
+    if (!_id) return res.status(400).json({ message: 'Missing _id for update' });
 
+    const item = await LostItem.findById(_id);
+    if (!item) return res.status(404).json({ message: 'Lost item not found' });
+
+    // Update fields
     item.fullnameofuser = req.body.fullnameofuser;
     item.mobile = req.body.mobile;
     item.email = req.body.email;
@@ -80,11 +84,15 @@ router.put('/:id', auth,  async (req, res) => {
     item.description = req.body.description;
     item.proof = req.body.proof;
 
+
     const updatedItem = await item.save();
-    res.json(updatedItem);
+    return res.status(200).json({ message: 'Lost item updated successfully', item: updatedItem });
+
   } catch (err) {
-    res.status(500).json({ error: 'Failed to update lost item' });
+    console.error('Update error:', err);
+    return res.status(500).json({ message: 'Update failed' });
   }
 });
+
 
 module.exports = router;

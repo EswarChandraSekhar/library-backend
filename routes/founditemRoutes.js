@@ -64,10 +64,13 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// PUT (update) found item by ID
-router.put('/:id', async (req, res) => {
+// Post (update) found item by ID
+router.post('/update', auth,upload.none(), async (req, res) => {
   try {
-    const item = await FoundItem.findById(req.params.id);
+    const { _id } = req.body;
+    if (!_id) return res.status(400).json({ message: 'Missing _id for update' });
+
+    const item = await FoundItem.findById(_id);
     if (!item) return res.status(404).json({ error: 'Found item not found' });
 
     item.fullname = req.body.fullname;
@@ -82,9 +85,10 @@ router.put('/:id', async (req, res) => {
     item.dateoffound = req.body.dateoffound;
 
     const updatedItem = await item.save();
-    res.json(updatedItem);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to update found item' });
+    return res.status(200).json({message: 'Found Item Updated Successfully', item: updatedItem})
+  } 
+  catch (err) {
+    return res.status(500).json({ message: 'Failed to update found item' });
   }
 });
 
